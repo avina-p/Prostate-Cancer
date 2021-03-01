@@ -1,0 +1,60 @@
+---
+title: "project title"
+date: "date"
+output: html_document
+theme: cerulean
+---
+```{r}
+library(readxl)   
+read_excel("Donations.xlsx")
+```
+
+```{r}
+library("ggplot2")
+Donate <- ggplot(Donations, aes(x=Week, y=Amount, fill=factor(Amount))) + ggtitle("Donations by Week")
+Donate+geom_histogram(fill=I("pink"), stat = "identity", col=I("white"), alpha = .5)
+```
+```{r}
+plot(Donations$Week,Donations$Amount, main="Donations by Week")
+Line.lm <- lm(Donations$Amount~Donations$Week)
+abline(Line.lm, col="red")
+```
+```{r}
+plot(Line.lm)
+```
+```{r}
+boxplot(Donations$Amount~Donations$Week, data = Donations,
+main="Date",xlab="Week", ylab="Amount")
+```
+
+
+```{r}
+Cancer <- read.delim("Cancer.txt", header=FALSE)
+```
+```{r}
+lcavol <- (Cancer$V1)
+lweight <- (Cancer$V2)
+age <- (Cancer$V3)
+lbph <- (Cancer$V4)
+svi <- (Cancer$V5)
+lcp <- (Cancer$V6)
+gleason <- (Cancer$V7)
+pgg45 <- (Cancer$V8)
+lpsa <- (Cancer$V9)
+```
+```{r}
+Antigens = lm(formula = lpsa ~ lcavol + lweight + age + lbph + svi + lcp + gleason + pgg45, data = Cancer)
+summary(Antigens)
+```
+```{r}
+anova(Antigens)
+```
+
+```{r}
+A1 <- anova(Antigens)
+cbind(A1, 'CriticalValue' = qf(1-.05, A1[1,1], A1[2,1]))
+```
+
+```{r}
+plot(Antigens)
+```
